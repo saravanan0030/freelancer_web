@@ -1,0 +1,99 @@
+{% extends 'layout.html' %}
+<!-- htmlhint off -->
+{% block content %}
+
+<h1 class="text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6">Dashboard</h1>
+
+<div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-2 sm:gap-3 md:gap-4 lg:gap-6">
+  <div class="bg-white p-3 sm:p-4 md:p-6 rounded shadow card hover:shadow-lg transition">
+    <h2 class="text-xs sm:text-sm md:text-lg font-semibold mb-2">Total Projects</h2>
+    <p class="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-bold text-blue-600">{{total}}</p>
+  </div>
+
+  <div class="bg-white p-3 sm:p-4 md:p-6 rounded shadow card hover:shadow-lg transition">
+    <h2 class="text-xs sm:text-sm md:text-lg font-semibold mb-2">Total Earnings</h2>
+    <p class="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-bold text-green-600">₹{{earnings|int}}</p>
+  </div>
+
+  <div class="bg-white p-3 sm:p-4 md:p-6 rounded shadow card hover:shadow-lg transition">
+    <h2 class="text-xs sm:text-sm md:text-lg font-semibold mb-2">Rating</h2>
+    <p class="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-bold text-purple-600">{{rating}} ⭐</p>
+  </div>
+</div>
+
+<h2 class="text-base sm:text-lg md:text-xl font-bold mt-6 sm:mt-8 md:mt-10 mb-3 sm:mb-4">Your Projects</h2>
+{% if projects %}
+<div class="bg-white rounded shadow overflow-hidden responsive-table">
+  <div class="overflow-x-auto">
+    <table class="w-full border-collapse text-xs sm:text-sm md:text-base">
+      <thead class="bg-gray-200 hidden md:table-header-group">
+        <tr>
+          <th class="border p-2 sm:p-3 md:p-4 text-left">Project Name</th>
+          <th class="border p-2 sm:p-3 md:p-4 text-left">Price</th>
+          <th class="border p-2 sm:p-3 md:p-4 text-left">Rating</th>
+          <th class="border p-2 sm:p-3 md:p-4 text-left">Contact</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in projects %}
+        <tr class="border-b md:border-b hover:bg-gray-50">
+          <td class="border p-2 sm:p-3 md:p-4 md:text-left" data-label="Project Name">{{p[2]}}</td>
+          <td class="border p-2 sm:p-3 md:p-4 md:text-left" data-label="Price">₹{{p[3]}}</td>
+          <td class="border p-2 sm:p-3 md:p-4 md:text-left" data-label="Rating">{{p[7]}}/5</td>
+          <td class="border p-2 sm:p-3 md:p-4 md:text-left" data-label="Contact">{{p[6] if p[6] else 'N/A'}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% else %}
+<div class="bg-white p-4 sm:p-6 rounded shadow text-center">
+  <p class="text-sm sm:text-base text-gray-600">No projects yet. <a href="/add" class="text-blue-500 hover:underline font-semibold">Add your first project</a></p>
+</div>
+{% endif %}
+
+<div class="mt-6 sm:mt-8 md:mt-10 flex justify-center px-2 sm:px-4">
+  <div class="bg-white p-3 sm:p-4 md:p-6 rounded shadow w-full max-w-sm md:max-w-md lg:max-w-lg">
+    <canvas id="chart"></canvas>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+<script>
+{% set total_val = total|int %}
+{% set earnings_val = earnings|int %}
+{% set rating_val = rating|float %}
+document.addEventListener('DOMContentLoaded', function() {
+  var chartCanvas = document.getElementById('chart');
+  if (chartCanvas) {
+    var ctx = chartCanvas.getContext('2d');
+    
+    // Chart data
+    var chartData = {
+      labels: ['Projects', 'Earnings', 'Rating'],
+      datasets: [{
+        data: [{{ total_val }}, {{ earnings_val }}, {{ rating_val }}],
+        backgroundColor: ['#3b82f6', '#8b5cf6', '#ec4899'],
+        borderColor: ['#1e3a8a', '#6d28d9', '#831843'],
+        borderWidth: 2
+      }]
+    };
+    
+    new Chart(ctx, {
+      type: 'doughnut',
+      data: chartData,
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top'
+          }
+        }
+      }
+    });
+  }
+});
+</script>
+
+{% endblock %}

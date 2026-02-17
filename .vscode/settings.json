@@ -1,0 +1,10 @@
+{
+  "html.lint.enable": false,
+  "[html]": {
+    "html.validate.scripts": false
+  },
+  "htmlhint.enable": false,
+  "files.exclude": {
+    "**/__pycache__": true
+  }
+}

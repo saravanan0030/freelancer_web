@@ -1,0 +1,99 @@
+{% extends 'layout.html' %}
+{% block content %}
+
+<h1 class="text-2xl md:text-3xl font-bold mb-6">Freelancer Dashboard</h1>
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+  <div class="bg-white p-4 md:p-6 rounded shadow card">
+    <h2 class="text-base md:text-lg font-semibold mb-2">Total Projects</h2>
+    <p class="text-2xl md:text-3xl font-bold text-blue-600">{{total}}</p>
+  </div>
+
+  <div class="bg-white p-4 md:p-6 rounded shadow card">
+    <h2 class="text-base md:text-lg font-semibold mb-2">Total Earnings</h2>
+    <p class="text-2xl md:text-3xl font-bold text-green-600">₹{{earnings|int}}</p>
+  </div>
+
+  <div class="bg-white p-4 md:p-6 rounded shadow card">
+    <h2 class="text-base md:text-lg font-semibold mb-2">Average Rating</h2>
+    <p class="text-2xl md:text-3xl font-bold text-purple-600">{{rating}}</p>
+  </div>
+</div>
+
+<h2 class="text-lg md:text-xl font-bold mt-8 md:mt-10 mb-4">Available Projects</h2>
+{% if projects %}
+<div class="bg-white rounded shadow overflow-x-auto">
+  <table class="w-full border-collapse">
+    <thead class="bg-gray-200">
+      <tr>
+        <th class="border p-3 text-left">Project Name</th>
+        <th class="border p-3 text-left">Price</th>
+        <th class="border p-3 text-left">Rating</th>
+        <th class="border p-3 text-left">Contact Number</th>
+        <th class="border p-3 text-left">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in projects %}
+      <tr class="border-b hover:bg-gray-50">
+        <td class="border p-3">{{p[2]}}</td>
+        <td class="border p-3">₹{{p[3]}}</td>
+        <td class="border p-3">{{p[7]}}/5</td>
+        <td class="border p-3">{{p[6] if p[6] else 'N/A'}}</td>
+        <td class="border p-3 space-x-2">
+          <a href="/edit/{{p[0]}}" class="bg-blue-500 text-white px-3 py-1 rounded text-sm hover:bg-blue-600">Edit</a>
+          <a href="/delete/{{p[0]}}" class="bg-red-500 text-white px-3 py-1 rounded text-sm hover:bg-red-600" onclick="return confirm('Delete this project?')">Delete</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="bg-white p-6 rounded shadow text-center">
+  <p class="text-gray-600">No projects available</p>
+</div>
+{% endif %}
+
+<div class="mt-8 md:mt-10 flex justify-center px-4">
+  <div class="bg-white p-4 md:p-6 rounded shadow w-full max-w-md">
+    <canvas id="chart"></canvas>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+<script>
+{% set total_val = total|int %}
+{% set earnings_val = earnings|int %}
+{% set rating_val = rating|float %}
+document.addEventListener('DOMContentLoaded', function() {
+  var chartCanvas = document.getElementById('chart');
+  if (chartCanvas) {
+    var ctx = chartCanvas.getContext('2d');
+    var chartData = {
+      labels: ['Projects', 'Earnings', 'Rating'],
+      datasets: [{
+        data: [{{ total_val }}, {{ earnings_val }}, {{ rating_val }}],
+        backgroundColor: ['#3b82f6', '#8b5cf6', '#ec4899'],
+        borderColor: ['#1e3a8a', '#6d28d9', '#831843'],
+        borderWidth: 2
+      }]
+    };
+    
+    new Chart(ctx, {
+      type: 'doughnut',
+      data: chartData,
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top'
+          }
+        }
+      }
+    });
+  }
+});
+</script>
+
+{% endblock %}
