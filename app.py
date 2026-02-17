@@ -1,10 +1,14 @@
-
 from flask import Flask, render_template, request, redirect, session
 import sqlite3, os
 from werkzeug.utils import secure_filename
+import tempfile
 
-app=Flask(__name__)
+app=Flask(__name__, template_folder='templates', static_folder='static')
 app.secret_key="secret"
+
+# Use /tmp for Vercel compatibility
+DB_PATH = os.path.join(tempfile.gettempdir(), 'freelancer.db') if os.environ.get('VERCEL') else 'database.db'
+
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
 
 # Create upload folder if it doesn't exist
@@ -24,7 +28,7 @@ def save_uploaded_file(file):
  return None
 
 def db():
- return sqlite3.connect("database.db")
+ return sqlite3.connect(DB_PATH)
 
 @app.route("/")
 def home():
@@ -182,4 +186,3 @@ def logout():
  session.clear()
  return redirect("/")
 
-app.run(debug=True)
