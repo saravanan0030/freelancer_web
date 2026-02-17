@@ -2,49 +2,150 @@
 {% extends 'layout.html' %}
 {% block content %}
 
-<h1 class="text-2xl md:text-3xl font-bold mb-6">Public Portfolio</h1>
-
-{% if projects %}
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-
-{% for p in projects %}
-
-<div class="bg-white rounded shadow card hover:shadow-lg transition">
-
-{% if p[4] %}
-<img src="/static/uploads/{{p[4]}}" alt="{{p[2]}}" class="h-40 w-full object-cover rounded-t">
-{% else %}
-<div class="h-40 w-full bg-gray-200 rounded-t flex items-center justify-center">
- <span class="text-gray-400">No Image</span>
-</div>
-{% endif %}
-
-<div class="p-4">
-
-<h2 class="font-bold text-xl mb-2">{{p[2]}}</h2>
-
-<p class="text-green-600 font-semibold mb-1">₹{{p[3]}}</p>
-
-<p class="text-yellow-500 mb-3">⭐ {{p[7]}}/5</p>
-
-<a href="/review/{{p[0]}}" class="bg-blue-500 text-white px-3 py-1 rounded text-sm hover:bg-blue-600">
- Review
-</a>
-
+<!-- Hero Section with Introduction -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-12">
+  <div class="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg p-8 md:p-12 shadow-lg flex flex-col justify-center">
+    <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">Welcome to My Portfolio</h1>
+    <p class="text-lg md:text-xl opacity-90 mb-6">Professional Freelancer & Project Specialist</p>
+    <div class="flex gap-4 flex-wrap">
+      <a href="#projects" class="bg-white text-blue-600 font-bold px-6 py-2 rounded-lg hover:bg-gray-100 transition inline-block">View Projects</a>
+      <a href="#skills" class="border-2 border-white text-white font-bold px-6 py-2 rounded-lg hover:bg-white hover:text-blue-600 transition inline-block">My Skills</a>
+    </div>
+  </div>
+  
+  <div class="bg-white rounded-lg p-8 md:p-10 shadow-lg">
+    <h2 class="text-2xl md:text-3xl font-bold mb-4 text-gray-800">About Me</h2>
+    <p class="text-gray-700 leading-relaxed mb-4">
+      I am a dedicated freelancer with a passion for delivering innovative and high-quality projects. 
+      With expertise in various domains, I focus on creating solutions that exceed client expectations.
+    </p>
+    <p class="text-gray-700 leading-relaxed mb-6">
+      My approach combines creative thinking with technical excellence to bring ideas to life. 
+      I'm committed to maintaining the highest standards while ensuring timely project delivery.
+    </p>
+    <div class="flex gap-3 flex-wrap">
+      <span class="bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-semibold">Professional</span>
+      <span class="bg-purple-100 text-purple-800 px-4 py-2 rounded-full text-sm font-semibold">Creative</span>
+      <span class="bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-semibold">Reliable</span>
+    </div>
+  </div>
 </div>
 
+<!-- Projects Section -->
+<div class="mb-12" id="projects">
+  <h2 class="text-2xl md:text-3xl font-bold mb-6 text-gray-800">My Projects</h2>
+  
+  {% if projects %}
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+    {% for p in projects %}
+    <div class="bg-white rounded-lg shadow-md card hover:shadow-xl transition overflow-hidden">
+      <!-- Project Image -->
+      {% if p[4] %}
+      <img src="/static/uploads/{{p[4]}}" alt="{{p[2]}}" class="h-48 w-full object-cover">
+      {% else %}
+      <div class="h-48 w-full bg-gradient-to-br from-blue-300 to-purple-300 flex items-center justify-center">
+        <span class="text-white text-lg">Project Image</span>
+      </div>
+      {% endif %}
+      
+      <!-- Project Info -->
+      <div class="p-6">
+        <h3 class="font-bold text-lg md:text-xl mb-2 text-gray-800">{{p[2]}}</h3>
+        
+        <div class="flex items-center justify-between mb-3">
+          <p class="text-green-600 font-semibold text-lg">₹{{p[3]}}</p>
+          <p class="text-yellow-500 font-semibold">⭐ {{p[7]}}/5</p>
+        </div>
+        
+        {% if p[6] %}
+        <p class="text-gray-600 text-sm mb-3">
+          <span class="font-semibold">Contact:</span> {{p[6]}}
+        </p>
+        {% endif %}
+        
+        <div class="pt-3 border-t border-gray-200">
+          <span class="inline-block bg-blue-100 text-blue-800 text-xs font-semibold px-3 py-1 rounded-full">Project</span>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="bg-white p-12 rounded-lg shadow text-center">
+    <p class="text-gray-600 text-lg mb-4">No projects available in portfolio</p>
+    <div class="inline-block bg-blue-100 text-blue-800 text-sm font-semibold px-6 py-3 rounded-lg">
+      Projects Coming Soon
+    </div>
+  </div>
+  {% endif %}
 </div>
 
-{% endfor %}
-
+<!-- Portfolio Stats -->
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 mb-12">
+  <div class="bg-white p-6 md:p-8 rounded-lg shadow-md text-center">
+    <div class="text-3xl md:text-4xl font-bold text-blue-600 mb-2">{{projects|length}}</div>
+    <p class="text-gray-600 font-semibold">Projects Completed</p>
+  </div>
+  
+  <div class="bg-white p-6 md:p-8 rounded-lg shadow-md text-center">
+    <div class="text-3xl md:text-4xl font-bold text-green-600 mb-2">
+      {% if projects %}
+        {{ (projects|map(attribute=7)|sum / projects|length)|round(1) }}
+      {% else %}
+        0
+      {% endif %}
+    </div>
+    <p class="text-gray-600 font-semibold">Average Rating</p>
+  </div>
+  
+  <div class="bg-white p-6 md:p-8 rounded-lg shadow-md text-center">
+    <div class="text-3xl md:text-4xl font-bold text-purple-600 mb-2">
+      {% if projects %}
+        ₹{{projects|map(attribute=3)|sum}}
+      {% else %}
+        0
+      {% endif %}
+    </div>
+    <p class="text-gray-600 font-semibold">Total Project Value</p>
+  </div>
 </div>
 
-{% else %}
-
-<div class="bg-white p-8 rounded shadow text-center">
- <p class="text-gray-600 text-lg">No projects available in portfolio</p>
+<!-- About Section -->
+<div class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-6 md:p-8 mb-12">
+  <h2 class="text-2xl md:text-3xl font-bold mb-4 text-gray-800">About This Portfolio</h2>
+  <p class="text-gray-700 leading-relaxed text-base md:text-lg">
+    Welcome to my professional portfolio showcasing a collection of completed projects and expertise. 
+    Each project demonstrates attention to detail, creative problem-solving, and commitment to delivering 
+    high-quality results. Feel free to explore my work and get in touch for collaboration opportunities.
+  </p>
 </div>
 
-{% endif %}
+<!-- Skills Section -->
+<div class="mb-12">
+  <h2 class="text-2xl md:text-3xl font-bold mb-6 text-gray-800">Skills & Specialties</h2>
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+    <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition">
+      <h3 class="text-lg font-bold text-blue-600 mb-2">🎨 Design</h3>
+      <p class="text-gray-600">Creative and modern design solutions</p>
+    </div>
+    <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition">
+      <h3 class="text-lg font-bold text-green-600 mb-2">💼 Professional</h3>
+      <p class="text-gray-600">Client-focused and reliable work</p>
+    </div>
+    <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition">
+      <h3 class="text-lg font-bold text-purple-600 mb-2">✨ Quality</h3>
+      <p class="text-gray-600">Excellence in every project</p>
+    </div>
+  </div>
+</div>
+
+<!-- CTA Section -->
+<div class="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg p-8 md:p-12 text-center">
+  <h2 class="text-2xl md:text-3xl font-bold mb-4">Interested in my work?</h2>
+  <p class="text-lg opacity-90 mb-6">Let's collaborate on your next project</p>
+  <a href="/freelancer-dashboard" class="inline-block bg-white text-blue-600 font-bold px-6 py-3 rounded-lg hover:bg-gray-100 transition">
+    View My Dashboard
+  </a>
+</div>
 
 {% endblock %}
