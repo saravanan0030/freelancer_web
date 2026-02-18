@@ -43,21 +43,17 @@ def home():
 def login():
  return render_template("role-select.html")
 
-@app.route("/client-login", methods=["GET","POST"])
+@app.route("/client-login")
 def client_login():
- if request.method=="POST":
-  session["user_id"]=1
-  session["role"]="client"
-  return redirect("/dashboard")
- return render_template("client-login.html")
+ session["user_id"]=1
+ session["role"]="client"
+ return redirect("/dashboard")
 
-@app.route("/freelancer-login", methods=["GET","POST"])
+@app.route("/freelancer-login")
 def freelancer_login():
- if request.method=="POST":
-  session["user_id"]=1
-  session["role"]="freelancer"
-  return redirect("/freelancer-dashboard")
- return render_template("freelancer-login.html")
+ session["user_id"]=1
+ session["role"]="freelancer"
+ return redirect("/freelancer-dashboard")
 
 @app.route("/dashboard")
 def dashboard():
@@ -185,4 +181,7 @@ def admin():
 def logout():
  session.clear()
  return redirect("/")
+
+if __name__ == "__main__":
+    app.run(debug=True)
 
