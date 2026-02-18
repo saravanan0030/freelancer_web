@@ -26,6 +26,8 @@ CREATE TABLE IF NOT EXISTS projects (
     client TEXT,
     contact TEXT,
     rating REAL DEFAULT 0,
+    status TEXT DEFAULT 'pending',
+    created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id)
 )
 """)
@@ -41,6 +43,18 @@ CREATE TABLE IF NOT EXISTS reviews (
     FOREIGN KEY (project_id) REFERENCES projects(id)
 )
 """)
+
+# Add status column if it doesn't exist
+try:
+    cursor.execute("ALTER TABLE projects ADD COLUMN status TEXT DEFAULT 'pending'")
+except sqlite3.OperationalError:
+    pass  # Column already exists
+
+# Add created_date column if it doesn't exist
+try:
+    cursor.execute("ALTER TABLE projects ADD COLUMN created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+except sqlite3.OperationalError:
+    pass  # Column already exists
 
 conn.commit()
 conn.close()

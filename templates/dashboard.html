@@ -31,6 +31,7 @@
           <th class="border p-2 sm:p-3 md:p-4 text-left">Project Name</th>
           <th class="border p-2 sm:p-3 md:p-4 text-left">Price</th>
           <th class="border p-2 sm:p-3 md:p-4 text-left">Rating</th>
+          <th class="border p-2 sm:p-3 md:p-4 text-left">Status</th>
           <th class="border p-2 sm:p-3 md:p-4 text-left">Contact</th>
         </tr>
       </thead>
@@ -40,6 +41,7 @@
           <td class="border p-2 sm:p-3 md:p-4 md:text-left" data-label="Project Name">{{p[2]}}</td>
           <td class="border p-2 sm:p-3 md:p-4 md:text-left" data-label="Price">₹{{p[3]}}</td>
           <td class="border p-2 sm:p-3 md:p-4 md:text-left" data-label="Rating">{{p[7]}}/5</td>
+          <td class="border p-2 sm:p-3 md:p-4 md:text-left" data-label="Status">{{p[8].replace('_', ' ').title()}}</td>
           <td class="border p-2 sm:p-3 md:p-4 md:text-left" data-label="Contact">{{p[6] if p[6] else 'N/A'}}</td>
         </tr>
         {% endfor %}

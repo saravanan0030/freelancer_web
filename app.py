@@ -110,8 +110,8 @@ def add():
   if "image" in request.files:
    image_filename = save_uploaded_file(request.files["image"])
   conn=db()
-  conn.execute("INSERT INTO projects(user_id,project_name,price,image,client,rating) VALUES(?,?,?,?,?,?)",
-  (1,request.form["title"],request.form["budget"],image_filename,request.form.get("contact",""),request.form["rating"]))
+  conn.execute("INSERT INTO projects(user_id,project_name,price,image,client,rating,status) VALUES(?,?,?,?,?,?,?)",
+  (1,request.form["title"],request.form["budget"],image_filename,request.form.get("contact",""),request.form["rating"],request.form.get("status","pending")))
   conn.commit()
   return redirect("/dashboard")
  return render_template("add.html")
@@ -137,11 +137,11 @@ def edit(id):
   image_filename = None
   if "image" in request.files and request.files["image"].filename:
    image_filename = save_uploaded_file(request.files["image"])
-   conn.execute("UPDATE projects SET project_name=?, price=?, image=?, client=?, rating=? WHERE id=?",
-   (request.form["title"],request.form["budget"],image_filename,request.form.get("contact",""),request.form["rating"],id))
+   conn.execute("UPDATE projects SET project_name=?, price=?, image=?, client=?, rating=?, status=? WHERE id=?",
+   (request.form["title"],request.form["budget"],image_filename,request.form.get("contact",""),request.form["rating"],request.form.get("status","pending"),id))
   else:
-   conn.execute("UPDATE projects SET project_name=?, price=?, client=?, rating=? WHERE id=?",
-   (request.form["title"],request.form["budget"],request.form.get("contact",""),request.form["rating"],id))
+   conn.execute("UPDATE projects SET project_name=?, price=?, client=?, rating=?, status=? WHERE id=?",
+   (request.form["title"],request.form["budget"],request.form.get("contact",""),request.form["rating"],request.form.get("status","pending"),id))
   conn.commit()
   session.pop("password_verified", None)
   return redirect("/freelancer-dashboard")
