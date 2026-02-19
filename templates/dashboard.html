@@ -42,7 +42,7 @@
           <td class="border p-2 sm:p-3 md:p-4 md:text-left" data-label="Price">₹{{p['price']}}</td>
           <td class="border p-2 sm:p-3 md:p-4 md:text-left" data-label="Rating">{{p['rating']}}/5</td>
           <td class="border p-2 sm:p-3 md:p-4 md:text-left" data-label="Status">{{p['status'].replace('_', ' ').title()}}</td>
-          <td class="border p-2 sm:p-3 md:p-4 md:text-left" data-label="Contact">{{p['contact'] if p['contact'] else 'N/A'}}</td>
+          <td class="border p-2 sm:p-3 md:p-4 md:text-left" data-label="Contact">{{p['contact']}}</td>
         </tr>
         {% endfor %}
       </tbody>
