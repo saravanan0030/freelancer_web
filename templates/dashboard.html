@@ -38,11 +38,11 @@
       <tbody>
         {% for p in projects %}
         <tr class="border-b md:border-b hover:bg-gray-50">
-          <td class="border p-2 sm:p-3 md:p-4 md:text-left" data-label="Project Name">{{p[2]}}</td>
-          <td class="border p-2 sm:p-3 md:p-4 md:text-left" data-label="Price">₹{{p[3]}}</td>
-          <td class="border p-2 sm:p-3 md:p-4 md:text-left" data-label="Rating">{{p[7]}}/5</td>
-          <td class="border p-2 sm:p-3 md:p-4 md:text-left" data-label="Status">{{p[8].replace('_', ' ').title()}}</td>
-          <td class="border p-2 sm:p-3 md:p-4 md:text-left" data-label="Contact">{{p[6] if p[6] else 'N/A'}}</td>
+          <td class="border p-2 sm:p-3 md:p-4 md:text-left" data-label="Project Name">{{p['project_name']}}</td>
+          <td class="border p-2 sm:p-3 md:p-4 md:text-left" data-label="Price">₹{{p['price']}}</td>
+          <td class="border p-2 sm:p-3 md:p-4 md:text-left" data-label="Rating">{{p['rating']}}/5</td>
+          <td class="border p-2 sm:p-3 md:p-4 md:text-left" data-label="Status">{{p['status'].replace('_', ' ').title()}}</td>
+          <td class="border p-2 sm:p-3 md:p-4 md:text-left" data-label="Contact">{{p['contact'] if p['contact'] else 'N/A'}}</td>
         </tr>
         {% endfor %}
       </tbody>

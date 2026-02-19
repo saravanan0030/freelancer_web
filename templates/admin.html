@@ -5,12 +5,12 @@
 
 <h2 class="text-xl mb-2">Users</h2>
 {% for u in users %}
-<p class="bg-white p-2 rounded shadow mb-2">{{u[1]}} - {{u[2]}}</p>
+<p class="bg-white p-2 rounded shadow mb-2">{{u['name']}} - {{u['email']}}</p>
 {% endfor %}
 
 <h2 class="text-xl mb-2 mt-6">Projects</h2>
 {% for p in projects %}
-<p class="bg-white p-2 rounded shadow mb-2">{{p[2]}} - ₹{{p[3]}}</p>
+<p class="bg-white p-2 rounded shadow mb-2">{{p['project_name']}} - ₹{{p['price']}}</p>
 {% endfor %}
 
 {% endblock %}
