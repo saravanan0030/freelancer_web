@@ -48,7 +48,9 @@ def get_cursor(conn):
 
 def execute_query(cursor, query, params=()):
     if USE_POSTGRES:
-        query = query.replace('%', '%s')
+        pass  # Already %s
+    else:
+        query = query.replace('%s', '?')
     cursor.execute(query, params)
     return cursor
 
@@ -111,6 +113,22 @@ CREATE TABLE IF NOT EXISTS reviews (
         execute_query(cursor, "ALTER TABLE projects ADD COLUMN created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     except:
         pass  # Column already exists
+    
+    # Insert default user if not exists
+    try:
+        if USE_POSTGRES:
+            execute_query(cursor, "INSERT INTO users (id, name, email, password, role) VALUES (%s, %s, %s, %s, %s) ON CONFLICT (id) DO NOTHING", (1, 'Default User', 'default@example.com', 'password', 'client'))
+        else:
+            # For SQLite, check if exists
+            cursor_check = get_cursor(conn)
+            execute_query(cursor_check, "SELECT id FROM users WHERE id=%s", (1,))
+            if not cursor_check.fetchone():
+                execute_query(cursor, "INSERT INTO users (id, name, email, password, role) VALUES (%s, %s, %s, %s, %s)", (1, 'Default User', 'default@example.com', 'password', 'client'))
+            if USE_POSTGRES:
+                cursor_check.close()
+    except:
+        pass  # User already exists or error
+    
     conn.commit()
     if USE_POSTGRES:
         cursor.close()
