@@ -81,28 +81,20 @@
 <!-- Portfolio Stats -->
 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 mb-12">
   <div class="bg-white p-6 md:p-8 rounded-lg shadow-md text-center">
-    <div class="text-3xl md:text-4xl font-bold text-blue-600 mb-2">{{projects|length}}</div>
+    <div class="text-3xl md:text-4xl font-bold text-blue-600 mb-2">{{total_projects}}</div>
     <p class="text-gray-600 font-semibold">Projects Completed</p>
   </div>
   
   <div class="bg-white p-6 md:p-8 rounded-lg shadow-md text-center">
     <div class="text-3xl md:text-4xl font-bold text-green-600 mb-2">
-      {% if projects %}
-        {{ (projects|map(attribute=7)|sum / projects|length)|round(1) }}
-      {% else %}
-        0
-      {% endif %}
+      {{ "%.1f"|format(avg_rating) }}
     </div>
     <p class="text-gray-600 font-semibold">Average Rating</p>
   </div>
   
   <div class="bg-white p-6 md:p-8 rounded-lg shadow-md text-center">
     <div class="text-3xl md:text-4xl font-bold text-purple-600 mb-2">
-      {% if projects %}
-        ₹{{projects|map(attribute=3)|sum}}
-      {% else %}
-        0
-      {% endif %}
+      ₹{{ "%.0f"|format(total_value) }}
     </div>
     <p class="text-gray-600 font-semibold">Total Project Value</p>
   </div>

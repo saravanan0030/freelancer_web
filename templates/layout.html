@@ -130,7 +130,7 @@ transform: translateX(-100%) !important;
 <a href="/logout" class="block p-2 sidebar-item rounded">Logout</a>
 {% elif session.get('role') == 'freelancer' %}
 <a href="/freelancer-dashboard" class="block p-2 sidebar-item rounded mb-2">Dashboard</a>
-<a href="/portfolio/{{session.user_id}}" class="block p-2 sidebar-item rounded mb-2">Portfolio</a>
+<a href="/portfolio/{{session.get('user_id')}}" class="block p-2 sidebar-item rounded mb-2">Portfolio</a>
 <a href="/logout" class="block p-2 sidebar-item rounded">Logout</a>
 {% endif %}
 
