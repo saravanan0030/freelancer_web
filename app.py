@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session, url_for
+from flask import Flask, render_template, request, redirect, session, url_for, flash
 import os
 import sqlite3
 from werkzeug.utils import secure_filename
@@ -182,16 +182,16 @@ def add():
         if "image" in request.files:
             image = save_uploaded_file(request.files["image"])
 
-    # Fix price from 'budget' field in the form
-    try:
-        price = float(request.form.get("budget") or 0)
-    except:
-        price = 0
+        # Fix price from 'budget' field in the form
+        try:
+            price = float(request.form.get("budget") or 0)
+        except ValueError:
+            price = 0
 
         # Fix rating
         try:
             rating = float(request.form.get("rating") or 0)
-        except:
+        except ValueError:
             rating = 0
 
         portfolio_url = request.form.get("portfolio_url") or ""
@@ -214,6 +214,8 @@ def add():
         ))
         conn.commit()
         conn.close()
+
+        flash("Project added successfully!", "success")
 
         if session.get("role") == "client":
             return redirect(url_for("dashboard"))
@@ -259,13 +261,13 @@ def edit_project(id):
         # Fix price from 'budget' field in the form
         try:
             price = float(request.form.get("budget") or 0)
-        except:
+        except ValueError:
             price = 0
 
         # Fix rating
         try:
             rating = float(request.form.get("rating") or 0)
-        except:
+        except ValueError:
             rating = 0
 
         # Keep existing image if new one not uploaded
@@ -303,6 +305,8 @@ def edit_project(id):
         # Clear flag so URL can't be reused
         session.pop("edit_ok", None)
 
+        flash("Project updated successfully!", "success")
+
         if session.get("role") == "client":
             return redirect(url_for("dashboard"))
         return redirect(url_for("freelancer_dashboard"))
@@ -338,6 +342,8 @@ def delete(id):
             conn.execute("DELETE FROM projects WHERE id = ?", (id,))
             conn.commit()
             conn.close()
+
+            flash("Project deleted successfully!", "success")
 
             if session.get("role") == "client":
                 return redirect(url_for("dashboard"))
